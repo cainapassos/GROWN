@@ -273,63 +273,7 @@ public class DeviceControlActivity extends Activity {
         });
     }
 
-    private void displayData(String data) {
-        if (data != null && data != "\n"  && data != "") {
-            inicioDescomp = System.currentTimeMillis();
-            int index = data.indexOf('\n');
-            //Pega valor correspondente a informacao
-            String valor = data.substring(0,index);
-
-            if (valor.charAt(0) == '-'){
-                try{
-                    leituraAtual = Integer.parseInt(valor.replaceAll("[\\D]",""));
-                    leituraAtual = leituraAtual - (leituraAtual * 2);
-
-                    if (inicio != true) {
-                        calc = anterior + leituraAtual;
-                        anterior = calc;
-                    } else{
-                        //Primeira passagem do metodo para leitura de valores
-                        anterior = leituraAtual;
-                        calc = leituraAtual;
-                        inicio = false;
-                    }
-                }catch(NumberFormatException er){
-                    Log.v("Erro Parse Int Negativo", "Error: "+er);
-                }
-            } else{
-                try{
-                    leituraAtual = Integer.parseInt(valor.replaceAll("[\\D]",""));
-
-                    if (inicio != true) {
-                        calc = anterior + leituraAtual;
-                        anterior = calc;
-                    } else{
-                        //Primeira passagem do metodo para leitura de valores
-                        anterior = leituraAtual;
-                        calc = leituraAtual;
-                        inicio = false;
-                    }
-                }catch(NumberFormatException er) {
-                    Log.v("Erro Parse Int Positivo", "Error: "+er);
-                }
-            }
-
-            if (calc > 0) {
-                totalDescomp = System.currentTimeMillis() - inicioDescomp;
-                Log.v("Tempo Descompressão: ", "Total: " + totalDescomp + "ms");
-                Log.v("Informação Recebida: ", valor);
-                mDataField2.setText(valor);
-                valor = String.valueOf(calc);
-                Log.v("Informação Desc: ", valor);
-                mDataField.setText(valor);
-               // tempoDescompressao((totalDescomp));
-                // sendDataAPI(valor);
-            }
-        }
-    }
-
-    // Demonstrates how to iterate through the supported GATT Services/Characteristics.
+     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
     // on the UI.
     private void displayGattServices(List<BluetoothGattService> gattServices) {
@@ -396,12 +340,12 @@ public class DeviceControlActivity extends Activity {
     }
 
 
-    //Envia dados para API ADAFRUIT
+    //Send data to API ADAFRUIT
     private void sendDataAPI(String data){
 
         data = "value="+data;
         String device = mDeviceName.toLowerCase();
-        String url =  //Padrão API POST
+        String url =  //Get to api adafruit
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         RequestBody body = RequestBody.create(mediaType, data);
 
@@ -425,7 +369,7 @@ public class DeviceControlActivity extends Activity {
         });
     }
 
-    //Salva Tempo de Descompressao no SD
+    //Save decompression time in SD card
     private void tempoDescompressao(long tempTotDesc){
         String etTexto = String.valueOf(tempTotDesc) + "\n";
 
@@ -441,22 +385,19 @@ public class DeviceControlActivity extends Activity {
                 diretorio.mkdirs();
             }
 
-            //Quando o File() tem um parâmetro ele cria um diretório.
-            //Quando tem dois ele cria um arquivo no diretório onde é informado.
             File fileExt = new File(diretorioApp, "descompressao.txt");
 
-            //Cria o arquivo
+            //Create file
             if(!fileExt.exists()){
                 fileExt.getParentFile().mkdirs();
             }
 
-            //Abre o arquivo
+            //Open file
             FileOutputStream fosExt = null;
             try{
                 fosExt = new FileOutputStream(fileExt, true);
                 //Escreve no arquivo
                 fosExt.write(etTexto.getBytes());
-                //Obrigatoriamente você precisa fechar
                 fosExt.flush();
                 fosExt.close();
                 Log.v("Salva Arquivo", "Arquivo salvo com sucesso");
@@ -469,8 +410,5 @@ public class DeviceControlActivity extends Activity {
         } else {
             Log.v("MONTA SD", "Erro na abertura do Diretorio ");
         }
-
-
-
     }
 }
