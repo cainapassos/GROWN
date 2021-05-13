@@ -77,7 +77,7 @@ public class DeviceControlActivity extends Activity {
     private long inicioDescomp;
     private long totalDescomp;
     private File diretorio;
-    private String nomeDiretorio = "TEMPO_DESCOMPRESSAO";
+    private String nomeDiretorio = "decompressionTime";
     private String diretorioApp;
 
     private TextView mConnectionState;
